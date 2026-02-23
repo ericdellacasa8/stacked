@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stacked - Make your stack visible</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .card-hover {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    }
+    
+    .modal {
+      animation: fadeIn 0.2s ease;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+    }
+
+    .hero-text-gradient {
+      background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Dark mode styles */
+    .dark {
+      color-scheme: dark;
+    }
+
+    .dark body {
+      background-color: #0a0a0f;
+      color: #f9fafb;
+    }
+
+    .dark .bg-white {
+      background-color: #1a1a2e;
+    }
+
+    .dark .bg-gray-50 {
+      background-color: #0a0a0f;
+    }
+
+    .dark .text-gray-900 {
+      color: #f9fafb;
+    }
+
+    .dark .text-gray-600 {
+      color: #d1d5db;
+    }
+
+    .dark .text-gray-500 {
+      color: #9ca3af;
+    }
+
+    .dark .text-gray-700 {
+      color: #e5e7eb;
+    }
+
+    .dark .text-gray-400 {
+      color: #9ca3af;
+    }
+
+    .dark .border-gray-200 {
+      border-color: #2d2d44;
+    }
+
+    .dark .border-gray-300 {
+      border-color: #3d3d5c;
+    }
+
+    .dark .bg-purple-600 {
+      background-color: #a78bfa;
+    }
+
+    .dark .bg-purple-600:hover {
+      background-color: #9333ea;
+    }
+
+    .dark .bg-gray-100 {
+      background-color: #2d2d44;
+      color: #f9fafb;
+    }
+
+    .dark .bg-gray-100:hover {
+      background-color: #3d3d5c;
+    }
+
+    .dark input,
+    .dark textarea,
+    .dark select {
+      background-color: #1a1a2e;
+      color: #f9fafb;
+      border-color: #3d3d5c;
+    }
+
+    .dark input:focus,
+    .dark textarea:focus,
+    .dark select:focus {
+      border-color: #a78bfa;
+      ring-color: #a78bfa;
+    }
+
+    .dark .hero-gradient {
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen transition-colors duration-200">
+  <!-- Navigation -->
+  <nav class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <h1 class="text-2xl font-bold text-gray-900">Stacked</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <button 
+            id="darkModeToggle"
+            class="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
+            title="Toggle dark mode"
+          >
+            <svg id="sunIcon" class="w-5 h-5 text-gray-600 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg id="moonIcon" class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+          <button 
+            id="addStackBtn"
+            class="bg-purple-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/30"
+          >
+            Add Stack
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="max-w-3xl">
+        <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6">
+          Build, share, and showcase 
+          <span class="hero-text-gradient">your stack.</span>
+        </h1>
+        <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+          Make your technology stack visible. Share the tools and services that power your projects with the world.
+        </p>
+        <div class="flex gap-4">
+          <button 
+            id="heroAddStackBtn"
+            class="bg-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-purple-700 transition-all text-lg shadow-xl shadow-purple-600/40"
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search and Filter Bar -->
+  <section class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-wrap gap-4">
+        <input 
+          type="text" 
+          id="searchInput"
+          placeholder="Search by provider name..."
+          class="flex-1 min-w-[200px] px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-base"
+        />
+        <select 
+          id="sortSelect"
+          class="px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-base font-medium"
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="layers-desc">Most Layers</option>
+          <option value="layers-asc">Fewest Layers</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
+      <!-- Cards will be dynamically inserted here -->
+    </div>
+    
+    <div id="emptyState" class="hidden text-center py-20">
+      <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+      </svg>
+      <h3 class="mt-4 text-xl font-bold text-gray-900">No stacks yet</h3>
+      <p class="mt-2 text-gray-500 text-lg">Get started by creating your first stack.</p>
+      <button 
+        id="emptyAddStackBtn"
+        class="mt-8 bg-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/30"
+      >
+        Add Stack
+      </button>
+    </div>
+  </main>
+
+  <!-- Add/Edit Stack Modal -->
+  <div id="addStackModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto modal shadow-2xl">
+      <div class="sticky top-0 bg-white border-b border-gray-200 px-8 py-6 flex justify-between items-center rounded-t-2xl">
+        <h2 id="modalTitle" class="text-3xl font-bold text-gray-900">Add Stack</h2>
+        <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <form id="addStackForm" class="p-8">
+        <input type="hidden" id="editingStackId" />
+        <!-- Project Information -->
+        <div class="mb-8">
+          <h3 class="text-xl font-bold text-gray-900 mb-6">Project Information</h3>
+          
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+              Project Name <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="projectName"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-base"
+              placeholder="My Awesome Project"
+            />
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+              Description
+            </label>
+            <textarea 
+              id="projectDescription"
+              rows="3"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent resize-none text-base"
+              placeholder="A brief description of your project..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Stack Layers -->
+        <div class="mb-8">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-900">Stack Layers</h3>
+            <button 
+              type="button"
+              id="addLayerBtn"
+              class="bg-gray-100 text-gray-900 px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-sm"
+            >
+              + Add Layer
+            </button>
+          </div>
+          
+          <div id="layersContainer" class="space-y-4">
+            <!-- Layers will be dynamically added here -->
+          </div>
+          
+          <p class="text-sm text-gray-500 mt-3">
+            Add layers from bottom to top (infrastructure → frontend)
+          </p>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex gap-4">
+          <button 
+            type="submit"
+            id="submitBtn"
+            class="flex-1 bg-purple-600 text-white px-6 py-4 rounded-xl font-semibold hover:bg-purple-700 transition-all text-base shadow-lg shadow-purple-600/30"
+          >
+            Publish Stack
+          </button>
+          <button 
+            type="button"
+            id="cancelBtn"
+            class="px-6 py-4 border-2 border-gray-300 rounded-xl font-semibold hover:bg-gray-50 transition-colors text-base"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Stack Detail Modal -->
+  <div id="detailModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto modal shadow-2xl">
+      <div class="sticky top-0 bg-white border-b border-gray-200 px-8 py-6 flex justify-between items-center rounded-t-2xl">
+        <h2 id="detailProjectName" class="text-3xl font-bold text-gray-900"></h2>
+        <button id="closeDetailBtn" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="p-8">
+        <p id="detailDescription" class="text-gray-600 mb-6 text-base leading-relaxed"></p>
+        
+        <div class="flex gap-3 mb-8">
+          <button 
+            id="editStackBtn"
+            class="px-5 py-2.5 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-all text-sm shadow-lg shadow-purple-600/30"
+          >
+            Edit Stack
+          </button>
+          <button 
+            id="deleteStackBtn"
+            class="px-5 py-2.5 border-2 border-red-300 text-red-600 rounded-xl font-semibold hover:bg-red-50 transition-colors text-sm"
+          >
+            Delete Stack
+          </button>
+        </div>
+
+        <h3 class="text-xl font-bold text-gray-900 mb-4">Technology Stack</h3>
+        <div id="detailStack" class="rounded-2xl overflow-hidden border border-gray-200 shadow-lg">
+          <!-- Stack visualization will be inserted here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
